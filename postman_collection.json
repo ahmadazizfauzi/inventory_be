@@ -1,0 +1,305 @@
+{
+	"info": {
+		"_postman_id": "8f8b8563-7188-4682-8bc1-inventory-sii",
+		"name": "Inventory & Stock Management API - PT Sistem Integrasi Indonesia",
+		"description": "Postman Collection for Technical Test Fullstack Developer (Laravel RESTful API with JWT Auth)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Login (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@demo.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/login", "host": ["{{base_url}}"], "path": ["login"] }
+					}
+				},
+				{
+					"name": "Login (Staff)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"staff@demo.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/login", "host": ["{{base_url}}"], "path": ["login"] }
+					}
+				},
+				{
+					"name": "Register (New User)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Budi Staff Baru\",\n    \"email\": \"budi.baru@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/register", "host": ["{{base_url}}"], "path": ["register"] }
+					}
+				},
+				{
+					"name": "Get Profile (Me)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/me", "host": ["{{base_url}}"], "path": ["me"] }
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/logout", "host": ["{{base_url}}"], "path": ["logout"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Dashboard",
+			"item": [
+				{
+					"name": "Get Dashboard Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/dashboard/summary", "host": ["{{base_url}}"], "path": ["dashboard", "summary"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Products",
+			"item": [
+				{
+					"name": "List Products (Default)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/products?page=1&per_page=10", "host": ["{{base_url}}"], "path": ["products"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "10" }] }
+					}
+				},
+				{
+					"name": "Search Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/products?search=Monitor", "host": ["{{base_url}}"], "path": ["products"], "query": [{ "key": "search", "value": "Monitor" }] }
+					}
+				},
+				{
+					"name": "Filter Low Stock Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/products?stock_status=low_stock", "host": ["{{base_url}}"], "path": ["products"], "query": [{ "key": "stock_status", "value": "low_stock" }] }
+					}
+				},
+				{
+					"name": "Get Product Detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/products/1", "host": ["{{base_url}}"], "path": ["products", "1"] }
+					}
+				},
+				{
+					"name": "Create Product (Admin Only)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"category_id\": 1,\n    \"sku\": \"PRD-026\",\n    \"name\": \"iPad Pro 11 M4\",\n    \"purchase_price\": 14500000,\n    \"selling_price\": 16900000,\n    \"stock\": 5,\n    \"min_stock\": 2\n}"
+						},
+						"url": { "raw": "{{base_url}}/products", "host": ["{{base_url}}"], "path": ["products"] }
+					}
+				},
+				{
+					"name": "Update Product (Admin Only)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"iPad Pro 11 M4 Wi-Fi 256GB\",\n    \"selling_price\": 17200000\n}"
+						},
+						"url": { "raw": "{{base_url}}/products/1", "host": ["{{base_url}}"], "path": ["products", "1"] }
+					}
+				},
+				{
+					"name": "Delete Product (Admin Only)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/products/1", "host": ["{{base_url}}"], "path": ["products", "1"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Stock Mutations",
+			"item": [
+				{
+					"name": "List Stock Mutations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/stock-mutations?page=1&per_page=10", "host": ["{{base_url}}"], "path": ["stock-mutations"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "10" }] }
+					}
+				},
+				{
+					"name": "Record Stock IN (Barang Masuk)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1,\n    \"supplier_id\": 1,\n    \"type\": \"in\",\n    \"quantity\": 5,\n    \"notes\": \"Restock pengadaan invoice PO-992\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/stock-mutations", "host": ["{{base_url}}"], "path": ["stock-mutations"] }
+					}
+				},
+				{
+					"name": "Record Stock OUT (Barang Keluar)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1,\n    \"type\": \"out\",\n    \"quantity\": 2,\n    \"notes\": \"Pengadaan workstation tim marketing\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/stock-mutations", "host": ["{{base_url}}"], "path": ["stock-mutations"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Categories & Suppliers",
+			"item": [
+				{
+					"name": "List Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/categories", "host": ["{{base_url}}"], "path": ["categories"] }
+					}
+				},
+				{
+					"name": "List Suppliers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": { "raw": "{{base_url}}/suppliers", "host": ["{{base_url}}"], "path": ["suppliers"] }
+					}
+				}
+			]
+		}
+	]
+}
