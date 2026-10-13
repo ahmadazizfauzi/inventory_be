@@ -89,7 +89,7 @@ class SupplierTest extends TestCase
             ->deleteJson("/api/suppliers/{$supplier->id}");
 
         $response->assertStatus(200);
-        $this->assertDatabaseMissing('suppliers', ['id' => $supplier->id]);
+        $this->assertSoftDeleted('suppliers', ['id' => $supplier->id]);
     }
 
     public function test_cannot_create_supplier_without_name(): void

@@ -36,10 +36,10 @@ class Product extends Model
         ];
     }
 
-    // Product belongs to a single category
+    // Product belongs to a single category (accessible even if soft deleted)
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->withTrashed();
     }
 
     // Product has historical stock mutations
