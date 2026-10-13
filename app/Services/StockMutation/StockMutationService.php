@@ -11,11 +11,13 @@ use Illuminate\Validation\ValidationException;
 class StockMutationService
 {
     // Retrieve paginated stock mutations with relations
-    public function paginate(int $perPage = 10, ?int $productId = null): LengthAwarePaginator
+    public function paginate(int $perPage = 10, ?int $productId = null, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
         return StockMutation::query()
             ->with(['product', 'user', 'supplier'])
             ->when($productId, fn ($q, $id) => $q->where('product_id', $id))
+            ->when($startDate, fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+            ->when($endDate, fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
             ->latest()
             ->paginate($perPage);
     }

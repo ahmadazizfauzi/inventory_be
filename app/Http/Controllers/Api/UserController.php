@@ -17,7 +17,14 @@ class UserController extends Controller
     public function index(): JsonResponse
     {
         $perPage = (int) request()->input('per_page', 10);
-        $users = User::latest()->paginate($perPage);
+        $startDate = request()->query('start_date');
+        $endDate = request()->query('end_date');
+
+        $users = User::query()
+            ->when($startDate, fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+            ->when($endDate, fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
+            ->latest()
+            ->paginate($perPage);
         $users->through(fn ($user) => new UserResource($user));
 
         return ApiResponse::paginated($users, 'Daftar pengguna berhasil dimuat');

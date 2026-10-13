@@ -21,6 +21,8 @@ class ListProductRequest extends FormRequest
             'stock_status' => ['sometimes', 'nullable', 'string', 'in:all,in_stock,low_stock,out_of_stock'],
             'sort_by' => ['sometimes', 'string', 'in:created_at,name,sku,stock,purchase_price,selling_price'],
             'sort_order' => ['sometimes', 'string', 'in:asc,desc'],
+            'start_date' => ['sometimes', 'nullable', 'date'],
+            'end_date' => ['sometimes', 'nullable', 'date'],
         ];
     }
 
@@ -61,5 +63,19 @@ class ListProductRequest extends FormRequest
     public function sortOrder(): string
     {
         return strtolower((string) $this->query('sort_order', 'desc')) === 'asc' ? 'asc' : 'desc';
+    }
+
+    public function startDate(): ?string
+    {
+        $val = $this->query('start_date');
+
+        return ($val !== null && trim($val) !== '') ? trim($val) : null;
+    }
+
+    public function endDate(): ?string
+    {
+        $val = $this->query('end_date');
+
+        return ($val !== null && trim($val) !== '') ? trim($val) : null;
     }
 }

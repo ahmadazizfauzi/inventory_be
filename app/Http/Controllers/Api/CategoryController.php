@@ -9,13 +9,17 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     // Retrieve list of all categories
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $categories = Category::withCount('products')->get();
+        $categories = Category::withCount('products')
+            ->when($request->query('start_date'), fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+            ->when($request->query('end_date'), fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
+            ->get();
 
         return ApiResponse::success(CategoryResource::collection($categories), 'Daftar kategori berhasil dimuat');
     }

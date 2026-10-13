@@ -19,8 +19,10 @@ class StockMutationController extends Controller
     {
         $perPage = min(100, max(1, (int) $request->query('per_page', 10)));
         $productId = $request->query('product_id') ? (int) $request->query('product_id') : null;
+        $startDate = $request->query('start_date') ? (string) $request->query('start_date') : null;
+        $endDate = $request->query('end_date') ? (string) $request->query('end_date') : null;
 
-        $paginated = $this->mutationService->paginate($perPage, $productId);
+        $paginated = $this->mutationService->paginate($perPage, $productId, $startDate, $endDate);
         $paginated->through(fn ($mutation) => new StockMutationResource($mutation));
 
         return ApiResponse::paginated($paginated, 'Riwayat mutasi stok berhasil dimuat');

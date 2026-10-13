@@ -23,6 +23,8 @@ class ProductService
             ->when($request->stockStatus() === 'low_stock', fn ($q) => $q->whereColumn('stock', '<=', 'min_stock'))
             ->when($request->stockStatus() === 'out_of_stock', fn ($q) => $q->where('stock', 0))
             ->when($request->stockStatus() === 'in_stock', fn ($q) => $q->where('stock', '>', 0))
+            ->when($request->startDate(), fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+            ->when($request->endDate(), fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
             ->orderBy($request->sortBy(), $request->sortOrder())
             ->paginate($request->perPage());
     }

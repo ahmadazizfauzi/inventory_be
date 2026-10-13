@@ -9,13 +9,17 @@ use App\Http\Resources\SupplierResource;
 use App\Models\Supplier;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
     // Retrieve list of all suppliers
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::query()
+            ->when($request->query('start_date'), fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+            ->when($request->query('end_date'), fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
+            ->get();
 
         return ApiResponse::success(SupplierResource::collection($suppliers), 'Daftar supplier berhasil dimuat');
     }
