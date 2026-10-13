@@ -13,19 +13,31 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    // Retrieve list of all categories
+    // Retrieve list of all categories with server-side pagination
     public function index(Request $request): JsonResponse
     {
-        $categories = Category::withCount('products')
+        $query = Category::withCount('products')
             ->when($request->query('search'), function ($q, $search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
+                $q->where(function ($sub) use ($search) {
+                    $sub->where('name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
             })
             ->when($request->query('start_date'), fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
             ->when($request->query('end_date'), fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
-            ->get();
+            ->latest();
 
-        return ApiResponse::success(CategoryResource::collection($categories), 'Daftar kategori berhasil dimuat');
+        // If explicit all=true requested (e.g. for dropdown selects)
+        if ($request->boolean('all')) {
+            $categories = $query->get();
+            return ApiResponse::success(CategoryResource::collection($categories), 'Daftar kategori berhasil dimuat');
+        }
+
+        $perPage = min(100, max(1, (int) $request->query('per_page', 10)));
+        $paginated = $query->paginate($perPage);
+        $paginated->through(fn ($category) => new CategoryResource($category));
+
+        return ApiResponse::paginated($paginated, 'Daftar kategori berhasil dimuat');
     }
 
     // Create a new category

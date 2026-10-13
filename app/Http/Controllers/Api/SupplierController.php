@@ -13,20 +13,32 @@ use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
-    // Retrieve list of all suppliers
+    // Retrieve list of all suppliers with server-side pagination
     public function index(Request $request): JsonResponse
     {
-        $suppliers = Supplier::query()
+        $query = Supplier::query()
             ->when($request->query('search'), function ($q, $search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('contact_info', 'like', "%{$search}%")
-                    ->orWhere('address', 'like', "%{$search}%");
+                $q->where(function ($sub) use ($search) {
+                    $sub->where('name', 'like', "%{$search}%")
+                        ->orWhere('contact_info', 'like', "%{$search}%")
+                        ->orWhere('address', 'like', "%{$search}%");
+                });
             })
             ->when($request->query('start_date'), fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
             ->when($request->query('end_date'), fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
-            ->get();
+            ->latest();
 
-        return ApiResponse::success(SupplierResource::collection($suppliers), 'Daftar supplier berhasil dimuat');
+        // If explicit all=true requested (e.g. for dropdown selects)
+        if ($request->boolean('all')) {
+            $suppliers = $query->get();
+            return ApiResponse::success(SupplierResource::collection($suppliers), 'Daftar supplier berhasil dimuat');
+        }
+
+        $perPage = min(100, max(1, (int) $request->query('per_page', 10)));
+        $paginated = $query->paginate($perPage);
+        $paginated->through(fn ($supplier) => new SupplierResource($supplier));
+
+        return ApiResponse::paginated($paginated, 'Daftar supplier berhasil dimuat');
     }
 
     // Create a new supplier
