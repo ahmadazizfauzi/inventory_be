@@ -18,6 +18,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Current user profile and logout
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/profile', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Financial valuation and stock monitoring summary
