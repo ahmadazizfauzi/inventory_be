@@ -17,6 +17,10 @@ class CategoryController extends Controller
     public function index(Request $request): JsonResponse
     {
         $categories = Category::withCount('products')
+            ->when($request->query('search'), function ($q, $search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            })
             ->when($request->query('start_date'), fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
             ->when($request->query('end_date'), fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
             ->get();

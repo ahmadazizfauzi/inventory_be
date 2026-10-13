@@ -17,6 +17,11 @@ class SupplierController extends Controller
     public function index(Request $request): JsonResponse
     {
         $suppliers = Supplier::query()
+            ->when($request->query('search'), function ($q, $search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('contact_info', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%");
+            })
             ->when($request->query('start_date'), fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
             ->when($request->query('end_date'), fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
             ->get();

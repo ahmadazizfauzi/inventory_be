@@ -11,13 +11,27 @@ use Illuminate\Validation\ValidationException;
 class StockMutationService
 {
     // Retrieve paginated stock mutations with relations
-    public function paginate(int $perPage = 10, ?int $productId = null, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
-    {
+    public function paginate(
+        int $perPage = 10,
+        ?int $productId = null,
+        ?string $startDate = null,
+        ?string $endDate = null,
+        ?string $search = null,
+        ?string $type = null
+    ): LengthAwarePaginator {
         return StockMutation::query()
             ->with(['product', 'user', 'supplier'])
             ->when($productId, fn ($q, $id) => $q->where('product_id', $id))
+            ->when($type && in_array($type, ['in', 'out']), fn ($q) => $q->where('type', $type))
             ->when($startDate, fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
             ->when($endDate, fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
+            ->when($search, function ($q, $kw) {
+                $q->where(function ($query) use ($kw) {
+                    $query->whereHas('product', fn ($p) => $p->where('name', 'like', "%{$kw}%")->orWhere('sku', 'like', "%{$kw}%"))
+                        ->orWhereHas('user', fn ($u) => $u->where('name', 'like', "%{$kw}%"))
+                        ->orWhere('notes', 'like', "%{$kw}%");
+                });
+            })
             ->latest()
             ->paginate($perPage);
     }

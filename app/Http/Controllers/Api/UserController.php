@@ -19,8 +19,13 @@ class UserController extends Controller
         $perPage = (int) request()->input('per_page', 10);
         $startDate = request()->query('start_date');
         $endDate = request()->query('end_date');
+        $search = request()->query('search');
 
         $users = User::query()
+            ->when($search, function ($q, $kw) {
+                $q->where('name', 'like', "%{$kw}%")
+                    ->orWhere('email', 'like', "%{$kw}%");
+            })
             ->when($startDate, fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
             ->when($endDate, fn ($q, $date) => $q->whereDate('created_at', '<=', $date))
             ->latest()
