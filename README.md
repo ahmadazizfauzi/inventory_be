@@ -2,6 +2,7 @@
 
 Aplikasi RESTful API sistem manajemen inventaris barang dan pencatatan mutasi stok gudang berbasis Laravel dengan autentikasi JWT (JSON Web Token) dan Role-Based Access Control (RBAC).
 
+
 ---
 
 ## Tech Stack
