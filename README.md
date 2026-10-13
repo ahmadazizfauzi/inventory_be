@@ -36,7 +36,7 @@ Ensure your database credentials in `.env` match your local MySQL configuration:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=tht_sii
+DB_DATABASE=inventory_db
 DB_USERNAME=root
 DB_PASSWORD=
 ```

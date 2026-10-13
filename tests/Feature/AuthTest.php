@@ -127,6 +127,11 @@ class AuthTest extends TestCase
                 'status_code' => 200,
                 'message' => 'Berhasil keluar',
             ]);
+
+        // Verify that the invalidated/blacklisted token can no longer be used
+        $retryResponse = $this->withHeader('Authorization', "Bearer {$token}")
+            ->getJson('/api/me');
+        $retryResponse->assertStatus(401);
     }
 
     public function test_unauthenticated_user_cannot_access_profile(): void
