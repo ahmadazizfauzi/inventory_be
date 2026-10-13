@@ -19,7 +19,7 @@ class CheckRole
         }
 
         if (! in_array($user->role, $roles, true)) {
-            return ApiResponse::forbidden('Forbidden. You do not have permission to access this resource.');
+            return ApiResponse::forbidden('Akses ditolak. Anda tidak memiliki izin untuk tindakan ini.');
         }
 
         return $next($request);

@@ -16,6 +16,6 @@ class DashboardController extends Controller
     {
         $summary = $this->dashboardService->getSummary();
 
-        return ApiResponse::success($summary, 'Dashboard summary retrieved successfully');
+        return ApiResponse::success($summary, 'Ringkasan dashboard berhasil dimuat');
     }
 }

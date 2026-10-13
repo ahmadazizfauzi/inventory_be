@@ -23,7 +23,7 @@ class AuthTest extends TestCase
         $response->assertStatus(201)
             ->assertJson([
                 'status_code' => 201,
-                'message' => 'User registered successfully',
+                'message' => 'Pengguna berhasil didaftarkan',
             ])
             ->assertJsonStructure([
                 'data' => [
@@ -71,7 +71,7 @@ class AuthTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'status_code' => 200,
-                'message' => 'Login successful',
+                'message' => 'Login berhasil',
             ])
             ->assertJsonStructure([
                 'data' => [
@@ -125,7 +125,7 @@ class AuthTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'status_code' => 200,
-                'message' => 'Successfully logged out',
+                'message' => 'Berhasil keluar',
             ]);
     }
 

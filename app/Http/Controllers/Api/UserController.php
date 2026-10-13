@@ -16,10 +16,11 @@ class UserController extends Controller
     // Retrieve list of all users
     public function index(): JsonResponse
     {
-        $users = User::latest()->paginate(15);
+        $perPage = (int) request()->input('per_page', 10);
+        $users = User::latest()->paginate($perPage);
         $users->through(fn ($user) => new UserResource($user));
 
-        return ApiResponse::paginated($users, 'Users retrieved successfully');
+        return ApiResponse::paginated($users, 'Daftar pengguna berhasil dimuat');
     }
 
     // Create a new user with specific role
@@ -30,7 +31,7 @@ class UserController extends Controller
 
         $user = User::create($validated);
 
-        return ApiResponse::created(new UserResource($user), 'User created successfully');
+        return ApiResponse::created(new UserResource($user), 'Pengguna berhasil ditambahkan');
     }
 
     // Retrieve single user detail
@@ -38,7 +39,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        return ApiResponse::success(new UserResource($user), 'User retrieved successfully');
+        return ApiResponse::success(new UserResource($user), 'Data pengguna berhasil dimuat');
     }
 
     // Update user profile or role
@@ -55,19 +56,19 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return ApiResponse::success(new UserResource($user), 'User updated successfully');
+        return ApiResponse::success(new UserResource($user), 'Pengguna berhasil diperbarui');
     }
 
     // Delete user (prevent deleting own account)
     public function destroy(int $id): JsonResponse
     {
         if ((int) auth('api')->id() === (int) $id) {
-            return ApiResponse::badRequest('You cannot delete your own account.');
+            return ApiResponse::badRequest('Anda tidak dapat menghapus akun Anda sendiri.');
         }
 
         $user = User::findOrFail($id);
         $user->delete();
 
-        return ApiResponse::success(null, 'User deleted successfully');
+        return ApiResponse::success(null, 'Pengguna berhasil dihapus');
     }
 }

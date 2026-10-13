@@ -8,7 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class ApiResponse
 {
     // Standard successful response
-    public static function success(mixed $data = null, string $message = 'Success', int $statusCode = 200): JsonResponse
+    public static function success(mixed $data = null, string $message = 'Berhasil', int $statusCode = 200): JsonResponse
     {
         return response()->json([
             'status_code' => $statusCode,
@@ -18,13 +18,13 @@ class ApiResponse
     }
 
     // 201 Created response
-    public static function created(mixed $data = null, string $message = 'Resource created successfully'): JsonResponse
+    public static function created(mixed $data = null, string $message = 'Data berhasil dibuat'): JsonResponse
     {
         return self::success($data, $message, 201);
     }
 
     // 200 OK paginated response with rich metadata
-    public static function paginated(LengthAwarePaginator $paginator, string $message = 'Data retrieved successfully'): JsonResponse
+    public static function paginated(LengthAwarePaginator $paginator, string $message = 'Data berhasil dimuat'): JsonResponse
     {
         return response()->json([
             'status_code' => 200,
@@ -44,7 +44,7 @@ class ApiResponse
     }
 
     // 400 Bad request response
-    public static function badRequest(string $message = 'Bad Request', mixed $errors = null): JsonResponse
+    public static function badRequest(string $message = 'Permintaan tidak valid.', mixed $errors = null): JsonResponse
     {
         return response()->json([
             'status_code' => 400,
@@ -54,7 +54,7 @@ class ApiResponse
     }
 
     // 401 Unauthorized response
-    public static function unauthorized(string $message = 'Unauthenticated or token has expired'): JsonResponse
+    public static function unauthorized(string $message = 'Tidak terautentikasi atau sesi token telah kedaluwarsa.'): JsonResponse
     {
         return response()->json([
             'status_code' => 401,
@@ -63,7 +63,7 @@ class ApiResponse
     }
 
     // 403 Forbidden response
-    public static function forbidden(string $message = 'Forbidden. You do not have permission'): JsonResponse
+    public static function forbidden(string $message = 'Akses ditolak. Anda tidak memiliki izin untuk tindakan ini.'): JsonResponse
     {
         return response()->json([
             'status_code' => 403,
@@ -72,7 +72,7 @@ class ApiResponse
     }
 
     // 404 Not found response
-    public static function notFound(string $message = 'Resource not found'): JsonResponse
+    public static function notFound(string $message = 'Data atau endpoint tidak ditemukan.'): JsonResponse
     {
         return response()->json([
             'status_code' => 404,
@@ -81,7 +81,7 @@ class ApiResponse
     }
 
     // 422 Validation error response
-    public static function validationError(mixed $errors, string $message = 'The given data was invalid'): JsonResponse
+    public static function validationError(mixed $errors, string $message = 'Data yang dikirimkan tidak valid.'): JsonResponse
     {
         return response()->json([
             'status_code' => 422,
@@ -91,7 +91,7 @@ class ApiResponse
     }
 
     // 500 Internal server error response
-    public static function serverError(string $message = 'Internal server error'): JsonResponse
+    public static function serverError(string $message = 'Terjadi kesalahan internal pada server.'): JsonResponse
     {
         return response()->json([
             'status_code' => 500,

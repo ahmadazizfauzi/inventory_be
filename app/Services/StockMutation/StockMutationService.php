@@ -31,7 +31,7 @@ class StockMutationService
 
             if ($data['type'] === 'out' && $quantity > $stockBefore) {
                 throw ValidationException::withMessages([
-                    'quantity' => ["Insufficient stock. Available stock is {$stockBefore}."],
+                    'quantity' => ["Stok tidak mencukupi. Stok yang tersedia saat ini adalah {$stockBefore}."],
                 ]);
             }
 

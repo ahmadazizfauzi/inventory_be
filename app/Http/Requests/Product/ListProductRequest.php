@@ -15,7 +15,7 @@ class ListProductRequest extends FormRequest
     {
         return [
             'page' => ['sometimes', 'integer', 'min:1'],
-            'per_page' => ['sometimes', 'integer', 'min:1', 'max:100'],
+            'per_page' => ['sometimes', 'integer', 'min:1', 'max:500'],
             'search' => ['sometimes', 'nullable', 'string', 'max:100'],
             'category_id' => ['sometimes', 'nullable', 'integer', 'exists:categories,id'],
             'stock_status' => ['sometimes', 'nullable', 'string', 'in:all,in_stock,low_stock,out_of_stock'],
@@ -31,7 +31,7 @@ class ListProductRequest extends FormRequest
 
     public function perPage(): int
     {
-        return min(100, max(1, (int) $this->query('per_page', 10)));
+        return min(500, max(1, (int) $this->query('per_page', 10)));
     }
 
     public function search(): ?string

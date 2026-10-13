@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    // Seed initial demo accounts and inventory catalog
+    // Seed initial demo accounts and general retail/consumer inventory catalog
     public function run(): void
     {
         $defaultPassword = Hash::make('password');
 
-        // 1. Seed Users (1 Superadmin, 15 Admin, 20 Staff)
+        // 1. Seed Users (Superadmin, Admin, Staff)
         User::create([
             'name' => 'Super Administrator',
             'email' => 'superadmin@demo.com',
@@ -35,7 +35,6 @@ class DatabaseSeeder extends Seeder
         $adminNames = [
             'Budi Santoso', 'Siti Rahmawati', 'Agus Prasetyo', 'Dewi Lestari', 'Eko Wibowo',
             'Rina Wijaya', 'Fajar Ramadhan', 'Nurul Hidayah', 'Bambang Irawan', 'Dian Anggraini',
-            'Hendra Kurniawan', 'Mega Putri', 'Aris Setiawan', 'Tri Wahyuni',
         ];
         foreach ($adminNames as $index => $name) {
             $slug = strtolower(str_replace(' ', '.', $name));
@@ -57,8 +56,6 @@ class DatabaseSeeder extends Seeder
         $staffNames = [
             'Adi Nugroho', 'Rizky Pratama', 'Indah Permata', 'Wahyu Hidayat', 'Bayu Saputra',
             'Putri Ayu', 'Dimas Wicaksono', 'Anisa Fitri', 'Yusuf Maulana', 'Lestari Handayani',
-            'Rian Firmansyah', 'Winda Sari', 'Ilham Saputra', 'Fitri Handayani', 'Gilang Ramadan',
-            'Maya Kusuma', 'Taufik Hidayat', 'Nadya Ulfah', 'Farhan Alamsyah',
         ];
         foreach ($staffNames as $index => $name) {
             $slug = strtolower(str_replace(' ', '.', $name));
@@ -70,23 +67,16 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 2. Seed 15 Categories
+        // 2. Seed 8 General Categories (Mudah dipahami, barang sehari-hari)
         $categoryData = [
-            ['name' => 'Komputer & Laptop', 'description' => 'Perangkat PC desktop, all-in-one, dan laptop kantor'],
-            ['name' => 'Monitor & Display', 'description' => 'Layar monitor kerja, proyektor, dan aksesoris display'],
-            ['name' => 'Perangkat Jaringan', 'description' => 'Router, switch manageable, access point, dan mikrotik'],
-            ['name' => 'Server & Storage', 'description' => 'Server rackmount, NAS storage, dan harddisk enterprise'],
-            ['name' => 'Aksesoris Komputer', 'description' => 'Keyboard, mouse, mousepad, docking station, dan webcam'],
-            ['name' => 'Kabel & Konektor', 'description' => 'Kabel LAN Cat6, kabel HDMI, DisplayPort, dan patch cord'],
-            ['name' => 'Printer & Scanner', 'description' => 'Printer laser, printer barcode, scanner dokumen, dan toner'],
-            ['name' => 'CCTV & Keamanan', 'description' => 'Kamera CCTV IP, NVR perekam, dan access door RFID'],
-            ['name' => 'Peralatan Audio', 'description' => 'Speaker meeting, headset call center, dan mikrofon konferensi'],
-            ['name' => 'UPS & Kelistrikan', 'description' => 'Uninterruptible power supply, PDU rack, dan stabilizer'],
-            ['name' => 'Alat Tulis Kantor', 'description' => 'Kertas A4, map arsip, binder, dan perlengkapan dokumen'],
-            ['name' => 'Furniture Kantor', 'description' => 'Kursi ergonomis, meja kerja, dan mobile drawer'],
-            ['name' => 'Perkakas & Toolset', 'description' => 'Crimping tool, tester LAN, obeng set, dan kabel ties'],
-            ['name' => 'Sparepart Komponen', 'description' => 'RAM DDR4/DDR5, SSD NVMe, power supply, dan pasta thermal'],
-            ['name' => 'Logistik & Packaging', 'description' => 'Bubble wrap, kardus pengiriman, dan lakban fragile'],
+            ['name' => 'Sembako & Bahan Pokok', 'description' => 'Beras, minyak goreng, gula, tepung, dan kebutuhan pokok'],
+            ['name' => 'Minuman & Kopi', 'description' => 'Kopi, teh, susu kemasan, dan aneka minuman konsumsi'],
+            ['name' => 'Makanan Ringan & Biskuit', 'description' => 'Camilan, biskuit, keripik, dan aneka snack'],
+            ['name' => 'Perlengkapan Mandi & Cuci', 'description' => 'Sabun, sampo, pasta gigi, dan deterjen pembersih'],
+            ['name' => 'Alat Tulis Kantor (ATK)', 'description' => 'Kertas HVS, pulpen, spidol, dan perlengkapan arsip'],
+            ['name' => 'Pakaian & Tekstil', 'description' => 'Kaos polos, kemeja kerja, handuk, dan pakaian katun'],
+            ['name' => 'Alat Dapur & Memasak', 'description' => 'Wajan anti lengket, panci stainless, dan perlengkapan masak'],
+            ['name' => 'Perabotan Rumah Tangga', 'description' => 'Sapu, ember plastik, lap kanebo, dan kebersihan rumah'],
         ];
 
         $categories = [];
@@ -94,23 +84,18 @@ class DatabaseSeeder extends Seeder
             $categories[] = Category::create($data);
         }
 
-        // 3. Seed 15 Suppliers
+        // 3. Seed 10 General Suppliers (Pemasok barang umum dan distributor retail)
         $supplierData = [
-            ['name' => 'PT Synnex Metrodata Indonesia', 'phone' => '021-29345800', 'email' => 'sales@metrodata.co.id', 'address' => 'Jl. S. Parman Kav. 32-34, Jakarta Barat'],
-            ['name' => 'PT Tera Data Indonusa', 'phone' => '031-5678912', 'email' => 'info@teradata.co.id', 'address' => 'Jl. Mayjen Sungkono No. 88, Surabaya'],
-            ['name' => 'PT Astrindo Senayasa', 'phone' => '021-6121330', 'email' => 'contact@astrindo.co.id', 'address' => 'Mangga Dua Square Blok F, Jakarta Pusat'],
-            ['name' => 'PT Berca Hardayaperkasa', 'phone' => '021-3800902', 'email' => 'enterprise@berca.co.id', 'address' => 'Jl. Abdul Muis No. 62, Jakarta Pusat'],
-            ['name' => 'PT Multipolar Technology', 'phone' => '021-5460011', 'email' => 'support@multipolar.com', 'address' => 'Lippo Karawaci Boulevard, Tangerang'],
-            ['name' => 'PT Sistech Kharisma', 'phone' => '021-6530668', 'email' => 'distribution@sistech.co.id', 'address' => 'Sunter Agung Podomoro, Jakarta Utara'],
-            ['name' => 'PT Harrisma Informatika Jaya', 'phone' => '021-7278788', 'email' => 'sales@harrisma.com', 'address' => 'Jl. Radio Dalam Raya No. 4, Jakarta Selatan'],
-            ['name' => 'PT ECS Indo Jaya', 'phone' => '021-6231289', 'email' => 'partner@ecsindo.com', 'address' => 'Komplek Harco Mangga Dua, Jakarta Pusat'],
-            ['name' => 'PT Graha Sumber Prima Elektronik', 'phone' => '022-4235889', 'email' => 'bandung@gspe.co.id', 'address' => 'Jl. Naripan No. 45, Bandung'],
-            ['name' => 'PT Jayatama Selaras Distribusi', 'phone' => '024-8451200', 'email' => 'semarang@jayatama.co.id', 'address' => 'Jl. Pemuda No. 120, Semarang'],
-            ['name' => 'Toko Grosir Komputer Jaya', 'phone' => '031-8419200', 'email' => 'grosir.jaya@gmail.com', 'address' => 'Hitech Mall Lt. 1, Surabaya'],
-            ['name' => 'CV Berkah Mandiri Office', 'phone' => '0274-512800', 'email' => 'berkah.office@gmail.com', 'address' => 'Jl. Gejayan No. 18, Yogyakarta'],
-            ['name' => 'PT Triputra Mega Persada', 'phone' => '061-4567890', 'email' => 'medan@triputra.co.id', 'address' => 'Jl. Gatot Subroto No. 200, Medan'],
-            ['name' => 'PT Solusi Jaringan Prima', 'phone' => '021-8899123', 'email' => 'network@solusiprima.id', 'address' => 'Harapan Indah Blok CA, Bekasi'],
-            ['name' => 'CV Duta Office Solution', 'phone' => '021-8612345', 'email' => 'dutaoffice@gmail.com', 'address' => 'Jl. Pemuda No. 70, Jakarta Timur'],
+            ['name' => 'PT Sumber Pangan Nusantara', 'phone' => '021-5566778', 'email' => 'sales@sumberpangan.co.id', 'address' => 'Kawasan Industri Pulogadung Blok A5, Jakarta Timur'],
+            ['name' => 'CV Berkah Makmur Abadi', 'phone' => '031-8971234', 'email' => 'distribusi@berkahmakmur.com', 'address' => 'Jl. Rungkut Industri No. 42, Surabaya'],
+            ['name' => 'PT Sinar Terang Distribusi', 'phone' => '021-6543210', 'email' => 'order@sinarterang.co.id', 'address' => 'Komplek Pergudangan Daan Mogot KM 12, Jakarta Barat'],
+            ['name' => 'CV Mitra Jaya Stationery', 'phone' => '022-7201987', 'email' => 'mitrajaya.atk@gmail.com', 'address' => 'Jl. Soekarno Hatta No. 128, Bandung'],
+            ['name' => 'PT Sejahtera Tekstil Pratama', 'phone' => '0274-889900', 'email' => 'tekstil@sejahtera.co.id', 'address' => 'Jl. Ring Road Utara Kav. 8, Sleman, Yogyakarta'],
+            ['name' => 'Toko Grosir Sembako Rejeki', 'phone' => '024-7654321', 'email' => 'grosir.rejeki@yahoo.com', 'address' => 'Pasar Induk Johar Blok C No. 15, Semarang'],
+            ['name' => 'PT Indah Cipta Mandiri', 'phone' => '021-8899776', 'email' => 'houseware@indahcipta.com', 'address' => 'Kawasan Pergudangan Harapan Indah Blok B, Bekasi'],
+            ['name' => 'CV Harapan Sentosa Jaya', 'phone' => '031-5432190', 'email' => 'harapansentosa@gmail.com', 'address' => 'Jl. Margomulyo Indah Blok D-11, Surabaya'],
+            ['name' => 'CV Pelita Surya Perkasa', 'phone' => '061-4561234', 'email' => 'pelitasurya@medan.co.id', 'address' => 'Jl. Krakatau Raya No. 90, Medan'],
+            ['name' => 'PT Aneka Niaga Lestari', 'phone' => '021-3456789', 'email' => 'info@anekanikaga.id', 'address' => 'Jl. Gatot Subroto Kav. 55, Jakarta Selatan'],
         ];
 
         $suppliers = [];
@@ -118,33 +103,48 @@ class DatabaseSeeder extends Seeder
             $suppliers[] = Supplier::create($data);
         }
 
-        // 4. Seed 25 Products with Simple SKUs (PRD-001 ... PRD-025)
+        // 4. Seed 25 General Everyday Products (PRD-001 ... PRD-025)
         $productsCatalog = [
-            ['cat' => 0, 'sku' => 'PRD-001', 'name' => 'Laptop Lenovo ThinkPad E14 Gen 5', 'buy' => 11500000, 'sell' => 13200000, 'stock' => 12, 'min' => 5],
-            ['cat' => 0, 'sku' => 'PRD-002', 'name' => 'PC Desktop HP Pro Tower 280 G9', 'buy' => 8700000, 'sell' => 10100000, 'stock' => 8, 'min' => 4],
-            ['cat' => 1, 'sku' => 'PRD-003', 'name' => 'Monitor LG 24 Inch IPS 75Hz (24MP400)', 'buy' => 1350000, 'sell' => 1650000, 'stock' => 20, 'min' => 5],
-            ['cat' => 1, 'sku' => 'PRD-004', 'name' => 'Monitor Dell 27 Inch 4K UHD (S2721QS)', 'buy' => 4200000, 'sell' => 4950000, 'stock' => 3, 'min' => 4], // Low stock
-            ['cat' => 2, 'sku' => 'PRD-005', 'name' => 'Switch Manageable Cisco Catalyst 24 Port', 'buy' => 6800000, 'sell' => 8200000, 'stock' => 5, 'min' => 3],
-            ['cat' => 2, 'sku' => 'PRD-006', 'name' => 'Router MikroTik CCR1009-7G-1C-1S+', 'buy' => 7200000, 'sell' => 8600000, 'stock' => 2, 'min' => 3], // Low stock
-            ['cat' => 2, 'sku' => 'PRD-007', 'name' => 'Access Point Ubiquiti UniFi 6 Pro', 'buy' => 2450000, 'sell' => 2950000, 'stock' => 14, 'min' => 5],
-            ['cat' => 3, 'sku' => 'PRD-008', 'name' => 'Server Dell PowerEdge R450 Rack 1U', 'buy' => 38500000, 'sell' => 44000000, 'stock' => 2, 'min' => 2],
-            ['cat' => 3, 'sku' => 'PRD-009', 'name' => 'NAS Synology DS923+ 4-Bay', 'buy' => 8900000, 'sell' => 10500000, 'stock' => 4, 'min' => 3],
-            ['cat' => 4, 'sku' => 'PRD-010', 'name' => 'Keyboard Mechanical Logitech K835 TKL', 'buy' => 520000, 'sell' => 690000, 'stock' => 25, 'min' => 8],
-            ['cat' => 4, 'sku' => 'PRD-011', 'name' => 'Mouse Wireless Logitech M331 Silent', 'buy' => 165000, 'sell' => 225000, 'stock' => 40, 'min' => 10],
-            ['cat' => 4, 'sku' => 'PRD-012', 'name' => 'Webcam Full HD 1080p Logitech C920', 'buy' => 950000, 'sell' => 1250000, 'stock' => 7, 'min' => 5],
-            ['cat' => 5, 'sku' => 'PRD-013', 'name' => 'Kabel UTP Belden Cat6 305 Meter Box', 'buy' => 1850000, 'sell' => 2200000, 'stock' => 6, 'min' => 4],
-            ['cat' => 5, 'sku' => 'PRD-014', 'name' => 'Kabel HDMI 2.1 Braided 3 Meter 8K', 'buy' => 95000, 'sell' => 145000, 'stock' => 30, 'min' => 10],
-            ['cat' => 6, 'sku' => 'PRD-015', 'name' => 'Printer Epson EcoTank L3210 All-in-One', 'buy' => 2200000, 'sell' => 2650000, 'stock' => 9, 'min' => 4],
-            ['cat' => 6, 'sku' => 'PRD-016', 'name' => 'Printer Barcode Thermal Zebra ZD220', 'buy' => 2100000, 'sell' => 2550000, 'stock' => 1, 'min' => 3], // Low stock
-            ['cat' => 7, 'sku' => 'PRD-017', 'name' => 'Kamera CCTV Hikvision IP Dome 4MP', 'buy' => 580000, 'sell' => 750000, 'stock' => 18, 'min' => 6],
-            ['cat' => 7, 'sku' => 'PRD-018', 'name' => 'NVR Hikvision 8 Channel DS-7608NI', 'buy' => 1650000, 'sell' => 2100000, 'stock' => 5, 'min' => 3],
-            ['cat' => 8, 'sku' => 'PRD-019', 'name' => 'Speakerphone Meeting Jabra Speak 510', 'buy' => 2100000, 'sell' => 2600000, 'stock' => 6, 'min' => 3],
-            ['cat' => 9, 'sku' => 'PRD-020', 'name' => 'UPS APC Back-UPS 1200VA 650W BX1200MI', 'buy' => 1850000, 'sell' => 2300000, 'stock' => 10, 'min' => 4],
-            ['cat' => 10, 'sku' => 'PRD-021', 'name' => 'Kertas PaperOne A4 80gr 1 Rim', 'buy' => 45000, 'sell' => 58000, 'stock' => 50, 'min' => 15],
-            ['cat' => 11, 'sku' => 'PRD-022', 'name' => 'Kursi Ergonomis Kantor Pira Metropolis', 'buy' => 850000, 'sell' => 1150000, 'stock' => 8, 'min' => 3],
-            ['cat' => 12, 'sku' => 'PRD-023', 'name' => 'Tang Crimping RJ45 AMP Tyco Original', 'buy' => 280000, 'sell' => 375000, 'stock' => 11, 'min' => 4],
-            ['cat' => 13, 'sku' => 'PRD-024', 'name' => 'SSD Samsung 980 Pro NVMe 1TB Gen4', 'buy' => 1450000, 'sell' => 1800000, 'stock' => 15, 'min' => 5],
-            ['cat' => 14, 'sku' => 'PRD-025', 'name' => 'Bubble Wrap Hitam Roll 1.25 x 50 Meter', 'buy' => 110000, 'sell' => 150000, 'stock' => 0, 'min' => 3], // Out of stock
+            // Sembako (Cat 0)
+            ['cat' => 0, 'sku' => 'PRD-001', 'name' => 'Beras Pandan Wangi Premium 5kg', 'buy' => 68000, 'sell' => 78000, 'stock' => 35, 'min' => 10],
+            ['cat' => 0, 'sku' => 'PRD-002', 'name' => 'Minyak Goreng Sawit Pouch 2 Liter', 'buy' => 32000, 'sell' => 37500, 'stock' => 50, 'min' => 15],
+            ['cat' => 0, 'sku' => 'PRD-003', 'name' => 'Gula Pasir Kristal Putih 1kg', 'buy' => 14500, 'sell' => 17000, 'stock' => 40, 'min' => 10],
+            ['cat' => 0, 'sku' => 'PRD-004', 'name' => 'Tepung Terigu Serbaguna 1kg', 'buy' => 11000, 'sell' => 13500, 'stock' => 25, 'min' => 8],
+
+            // Minuman & Kopi (Cat 1)
+            ['cat' => 1, 'sku' => 'PRD-005', 'name' => 'Kopi Arabika Bubuk Murni 250gr', 'buy' => 35000, 'sell' => 45000, 'stock' => 20, 'min' => 5],
+            ['cat' => 1, 'sku' => 'PRD-006', 'name' => 'Teh Celup Hitam Melati Isi 25', 'buy' => 6500, 'sell' => 8500, 'stock' => 4, 'min' => 10], // Low stock
+            ['cat' => 1, 'sku' => 'PRD-007', 'name' => 'Susu Sapi UHT Full Cream 1 Liter', 'buy' => 17500, 'sell' => 21000, 'stock' => 30, 'min' => 8],
+            ['cat' => 1, 'sku' => 'PRD-008', 'name' => 'Air Mineral Galon 19 Liter', 'buy' => 19000, 'sell' => 23000, 'stock' => 15, 'min' => 5],
+
+            // Makanan Ringan (Cat 2)
+            ['cat' => 2, 'sku' => 'PRD-009', 'name' => 'Biskuit Cokelat Kaleng 300gr', 'buy' => 28000, 'sell' => 35000, 'stock' => 18, 'min' => 5],
+            ['cat' => 2, 'sku' => 'PRD-010', 'name' => 'Keripik Singkong Renyah Balado 200gr', 'buy' => 12000, 'sell' => 16000, 'stock' => 22, 'min' => 6],
+            ['cat' => 2, 'sku' => 'PRD-011', 'name' => 'Wafer Krim Cokelat Roll 150gr', 'buy' => 8500, 'sell' => 11500, 'stock' => 0, 'min' => 5], // Out of stock
+
+            // Perlengkapan Mandi & Cuci (Cat 3)
+            ['cat' => 3, 'sku' => 'PRD-012', 'name' => 'Sabun Mandi Cair Botol 450ml', 'buy' => 18000, 'sell' => 23000, 'stock' => 28, 'min' => 8],
+            ['cat' => 3, 'sku' => 'PRD-013', 'name' => 'Shampo Rambut Sehat 340ml', 'buy' => 27000, 'sell' => 34000, 'stock' => 16, 'min' => 5],
+            ['cat' => 3, 'sku' => 'PRD-014', 'name' => 'Deterjen Bubuk Bersih Harum 800gr', 'buy' => 19500, 'sell' => 24500, 'stock' => 35, 'min' => 10],
+            ['cat' => 3, 'sku' => 'PRD-015', 'name' => 'Pasta Gigi Herbal Perlindungan 190gr', 'buy' => 12500, 'sell' => 16000, 'stock' => 3, 'min' => 8], // Low stock
+
+            // Alat Tulis Kantor (Cat 4)
+            ['cat' => 4, 'sku' => 'PRD-016', 'name' => 'Kertas HVS Putih A4 80gr 1 Rim', 'buy' => 45000, 'sell' => 55000, 'stock' => 40, 'min' => 10],
+            ['cat' => 4, 'sku' => 'PRD-017', 'name' => 'Pulpen Gel Tinta Hitam 0.5mm 1 Lusin', 'buy' => 24000, 'sell' => 32000, 'stock' => 25, 'min' => 6],
+            ['cat' => 4, 'sku' => 'PRD-018', 'name' => 'Spidol Papan Tulis Hitam 1 Kotak', 'buy' => 65000, 'sell' => 82000, 'stock' => 12, 'min' => 4],
+            ['cat' => 4, 'sku' => 'PRD-019', 'name' => 'Map Arsip Dokumen Plastik 1 Lusin', 'buy' => 28000, 'sell' => 38000, 'stock' => 50, 'min' => 15],
+
+            // Pakaian & Tekstil (Cat 5)
+            ['cat' => 5, 'sku' => 'PRD-020', 'name' => 'Kaos Polos Katun Combed 30s Hitam', 'buy' => 38000, 'sell' => 55000, 'stock' => 30, 'min' => 10],
+            ['cat' => 5, 'sku' => 'PRD-021', 'name' => 'Kemeja Polos Formal Putih Lengan Panjang', 'buy' => 85000, 'sell' => 120000, 'stock' => 14, 'min' => 5],
+            ['cat' => 5, 'sku' => 'PRD-022', 'name' => 'Handuk Mandi Katun Lembut 70x140cm', 'buy' => 45000, 'sell' => 65000, 'stock' => 18, 'min' => 5],
+
+            // Alat Dapur (Cat 6)
+            ['cat' => 6, 'sku' => 'PRD-023', 'name' => 'Wajan Teflon Anti Lengket 24cm', 'buy' => 75000, 'sell' => 105000, 'stock' => 9, 'min' => 3],
+            ['cat' => 6, 'sku' => 'PRD-024', 'name' => 'Panci Masak Stainless Steel 20cm', 'buy' => 68000, 'sell' => 95000, 'stock' => 11, 'min' => 4],
+
+            // Perabotan Rumah Tangga (Cat 7)
+            ['cat' => 7, 'sku' => 'PRD-025', 'name' => 'Sapu Lantai Nilon Gagang Besi', 'buy' => 22000, 'sell' => 30000, 'stock' => 20, 'min' => 5],
         ];
 
         $products = [];
@@ -160,31 +160,31 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 5. Seed Historical Stock Mutations (20 Initial Records)
+        // 5. Seed Historical Stock Mutations (Transaksi realistis)
         $adminUser = User::where('role', 'admin')->first();
         $staffUser = User::where('role', 'staff')->first();
 
         $mutationsSample = [
-            ['prod' => 0, 'sup' => 0, 'type' => 'in', 'qty' => 15, 'note' => 'Restock pengadaan awal laptop kantor'],
-            ['prod' => 0, 'sup' => null, 'type' => 'out', 'qty' => 3, 'note' => 'Penyerahan laptop untuk dev team baru'],
-            ['prod' => 2, 'sup' => 1, 'type' => 'in', 'qty' => 25, 'note' => 'Pengadaan monitor kantor cabang'],
-            ['prod' => 2, 'sup' => null, 'type' => 'out', 'qty' => 5, 'note' => 'Pemasangan display workstation lantai 2'],
-            ['prod' => 4, 'sup' => 3, 'type' => 'in', 'qty' => 7, 'note' => 'PO Switch Cisco rack server'],
-            ['prod' => 4, 'sup' => null, 'type' => 'out', 'qty' => 2, 'note' => 'Instalasi switch ruang server'],
-            ['prod' => 6, 'sup' => 4, 'type' => 'in', 'qty' => 16, 'note' => 'Restock AP UniFi dari distributor'],
-            ['prod' => 6, 'sup' => null, 'type' => 'out', 'qty' => 2, 'note' => 'Pemasangan wifi ruang meeting'],
-            ['prod' => 9, 'sup' => 2, 'type' => 'in', 'qty' => 30, 'note' => 'Pengadaan keyboard karyawan'],
-            ['prod' => 9, 'sup' => null, 'type' => 'out', 'qty' => 5, 'note' => 'Penggantian keyboard divisi support'],
-            ['prod' => 10, 'sup' => 2, 'type' => 'in', 'qty' => 50, 'note' => 'Restock mouse wireless Logitech'],
-            ['prod' => 10, 'sup' => null, 'type' => 'out', 'qty' => 10, 'note' => 'Distribusi mouse divisi operasional'],
-            ['prod' => 12, 'sup' => 0, 'type' => 'in', 'qty' => 8, 'note' => 'Restock kabel Belden Cat6'],
-            ['prod' => 12, 'sup' => null, 'type' => 'out', 'qty' => 2, 'note' => 'Penarikan kabel jaringan ruang direksi'],
-            ['prod' => 14, 'sup' => 5, 'type' => 'in', 'qty' => 12, 'note' => 'Pengadaan printer Epson all in one'],
-            ['prod' => 14, 'sup' => null, 'type' => 'out', 'qty' => 3, 'note' => 'Penempatan printer divisi finance & HR'],
-            ['prod' => 19, 'sup' => 6, 'type' => 'in', 'qty' => 12, 'note' => 'Restock unit UPS APC'],
-            ['prod' => 19, 'sup' => null, 'type' => 'out', 'qty' => 2, 'note' => 'Pemasangan backup daya server lokal'],
-            ['prod' => 23, 'sup' => 7, 'type' => 'in', 'qty' => 20, 'note' => 'Restock SSD Samsung 980 Pro 1TB'],
-            ['prod' => 23, 'sup' => null, 'type' => 'out', 'qty' => 5, 'note' => 'Upgrade storage PC engineer'],
+            ['prod' => 0, 'sup' => 0, 'type' => 'in', 'qty' => 50, 'note' => 'Penerimaan pasokan beras dari PT Sumber Pangan Nusantara'],
+            ['prod' => 0, 'sup' => null, 'type' => 'out', 'qty' => 15, 'note' => 'Pengiriman beras pesanan toko cabang'],
+            ['prod' => 1, 'sup' => 0, 'type' => 'in', 'qty' => 60, 'note' => 'Restock minyak goreng 2L dari distributor'],
+            ['prod' => 1, 'sup' => null, 'type' => 'out', 'qty' => 10, 'note' => 'Penjualan grosir minyak goreng'],
+            ['prod' => 2, 'sup' => 0, 'type' => 'in', 'qty' => 50, 'note' => 'Penerimaan gula pasir kristal putih'],
+            ['prod' => 2, 'sup' => null, 'type' => 'out', 'qty' => 10, 'note' => 'Distribusi gula pasir ke display penjualan'],
+            ['prod' => 4, 'sup' => 1, 'type' => 'in', 'qty' => 30, 'note' => 'Pengadaan kopi bubuk Arabika dari CV Berkah Makmur'],
+            ['prod' => 4, 'sup' => null, 'type' => 'out', 'qty' => 10, 'note' => 'Pengambilan sampel dan penjualan outlet'],
+            ['prod' => 6, 'sup' => 1, 'type' => 'in', 'qty' => 40, 'note' => 'Restock susu UHT Full Cream 1L'],
+            ['prod' => 6, 'sup' => null, 'type' => 'out', 'qty' => 10, 'note' => 'Distribusi susu kemasan ke rak toko'],
+            ['prod' => 8, 'sup' => 1, 'type' => 'in', 'qty' => 25, 'note' => 'Penerimaan biskuit cokelat kaleng'],
+            ['prod' => 8, 'sup' => null, 'type' => 'out', 'qty' => 7, 'note' => 'Penjualan paket parsel biskuit'],
+            ['prod' => 11, 'sup' => 2, 'type' => 'in', 'qty' => 40, 'note' => 'Restock sabun mandi cair dari PT Sinar Terang'],
+            ['prod' => 11, 'sup' => null, 'type' => 'out', 'qty' => 12, 'note' => 'Penjualan retail sabun mandi'],
+            ['prod' => 13, 'sup' => 2, 'type' => 'in', 'qty' => 50, 'note' => 'Penerimaan deterjen bubuk konsentrat'],
+            ['prod' => 13, 'sup' => null, 'type' => 'out', 'qty' => 15, 'note' => 'Distribusi deterjen ke etalase'],
+            ['prod' => 15, 'sup' => 3, 'type' => 'in', 'qty' => 50, 'note' => 'Pengadaan kertas HVS A4 dari CV Mitra Jaya'],
+            ['prod' => 15, 'sup' => null, 'type' => 'out', 'qty' => 10, 'note' => 'Pemakaian operasional kantor dan cetak laporan'],
+            ['prod' => 19, 'sup' => 4, 'type' => 'in', 'qty' => 40, 'note' => 'Penerimaan kaos polos katun hitam dari PT Sejahtera Tekstil'],
+            ['prod' => 19, 'sup' => null, 'type' => 'out', 'qty' => 10, 'note' => 'Penjualan kaos katun ke customer retail'],
         ];
 
         foreach ($mutationsSample as $item) {

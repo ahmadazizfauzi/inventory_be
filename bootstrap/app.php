@@ -33,23 +33,23 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (ValidationException $e, Request $request) {
             return ApiResponse::validationError(
                 $e->validator->errors()->messages(),
-                'The given data was invalid.'
+                'Data yang dikirimkan tidak valid.'
             );
         });
 
         // Standardize unauthenticated responses
         $exceptions->render(function (AuthenticationException $e, Request $request) {
-            return ApiResponse::unauthorized('Unauthenticated or token has expired.');
+            return ApiResponse::unauthorized('Tidak terautentikasi atau sesi token telah kedaluwarsa.');
         });
 
         // Standardize 403 forbidden responses
         $exceptions->render(function (AccessDeniedHttpException $e, Request $request) {
-            return ApiResponse::forbidden($e->getMessage() ?: 'Forbidden. You do not have permission.');
+            return ApiResponse::forbidden($e->getMessage() ?: 'Akses ditolak. Anda tidak memiliki izin untuk tindakan ini.');
         });
 
         // Standardize 404 not found responses
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
-            return ApiResponse::notFound('Resource or endpoint not found.');
+            return ApiResponse::notFound('Data atau endpoint tidak ditemukan.');
         });
 
         // Catch other HTTP or server errors in API
@@ -59,7 +59,7 @@ return Application::configure(basePath: dirname(__DIR__))
             }
 
             $status = $e instanceof HttpExceptionInterface ? $e->getStatusCode() : 500;
-            $message = $status === 404 ? 'Resource not found.' : 'Internal server error.';
+            $message = $status === 404 ? 'Data tidak ditemukan.' : 'Terjadi kesalahan internal pada server.';
 
             return ApiResponse::success(null, $message, $status);
         });

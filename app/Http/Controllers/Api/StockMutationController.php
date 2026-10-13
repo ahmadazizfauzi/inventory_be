@@ -23,7 +23,7 @@ class StockMutationController extends Controller
         $paginated = $this->mutationService->paginate($perPage, $productId);
         $paginated->through(fn ($mutation) => new StockMutationResource($mutation));
 
-        return ApiResponse::paginated($paginated, 'Stock mutations retrieved successfully');
+        return ApiResponse::paginated($paginated, 'Riwayat mutasi stok berhasil dimuat');
     }
 
     // Record stock mutation (IN / OUT) and update product balance
@@ -34,7 +34,7 @@ class StockMutationController extends Controller
 
         return ApiResponse::created(
             new StockMutationResource($mutation),
-            'Stock mutation recorded successfully'
+            'Mutasi stok berhasil dicatat'
         );
     }
 }

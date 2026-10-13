@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "8f8b8563-7188-4682-8bc1-inventory-sii",
-		"name": "Inventory & Stock Management API - PT Sistem Integrasi Indonesia",
-		"description": "Postman Collection for Technical Test Fullstack Developer (Laravel RESTful API with JWT Auth)",
+		"_postman_id": "8f8b8563-7188-4682-8bc1-inventory-core",
+		"name": "Inventory & Stock Management API",
+		"description": "Postman Collection for Inventory & Stock Management API (Laravel RESTful API with JWT Auth)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"variable": [

@@ -22,7 +22,7 @@ class AuthController extends Controller
         return ApiResponse::created([
             'user' => new UserResource($result['user']),
             'token' => $result['token'],
-        ], 'User registered successfully');
+        ], 'Pengguna berhasil didaftarkan');
     }
 
     // Handle user login and JWT token generation
@@ -31,13 +31,13 @@ class AuthController extends Controller
         $result = $this->authService->login($request->validated());
 
         if (! $result) {
-            return ApiResponse::unauthorized('Invalid email or password');
+            return ApiResponse::unauthorized('Email atau password salah');
         }
 
         return ApiResponse::success([
             'user' => new UserResource($result['user']),
             'token' => $result['token'],
-        ], 'Login successful');
+        ], 'Login berhasil');
     }
 
     // Retrieve currently authenticated user profile
@@ -45,7 +45,7 @@ class AuthController extends Controller
     {
         return ApiResponse::success(
             new UserResource(auth('api')->user()),
-            'User profile retrieved successfully'
+            'Profil pengguna berhasil dimuat'
         );
     }
 
@@ -54,6 +54,6 @@ class AuthController extends Controller
     {
         $this->authService->logout();
 
-        return ApiResponse::success(null, 'Successfully logged out');
+        return ApiResponse::success(null, 'Berhasil keluar');
     }
 }

@@ -22,7 +22,7 @@ class ProductController extends Controller
         $paginated = $this->productService->paginate($request);
         $paginated->through(fn ($product) => new ProductResource($product));
 
-        return ApiResponse::paginated($paginated, 'Products retrieved successfully');
+        return ApiResponse::paginated($paginated, 'Daftar produk berhasil dimuat');
     }
 
     // Create a new product
@@ -31,7 +31,7 @@ class ProductController extends Controller
         $product = $this->productService->create($request->validated());
         $product->load('category');
 
-        return ApiResponse::created(new ProductResource($product), 'Product created successfully');
+        return ApiResponse::created(new ProductResource($product), 'Produk berhasil ditambahkan');
     }
 
     // Retrieve single product detail
@@ -39,7 +39,7 @@ class ProductController extends Controller
     {
         $product = Product::with('category')->findOrFail($id);
 
-        return ApiResponse::success(new ProductResource($product), 'Product retrieved successfully');
+        return ApiResponse::success(new ProductResource($product), 'Data produk berhasil dimuat');
     }
 
     // Update existing product
@@ -48,7 +48,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $updated = $this->productService->update($product, $request->validated());
 
-        return ApiResponse::success(new ProductResource($updated), 'Product updated successfully');
+        return ApiResponse::success(new ProductResource($updated), 'Produk berhasil diperbarui');
     }
 
     // Soft delete product
@@ -57,6 +57,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $this->productService->delete($product);
 
-        return ApiResponse::success(null, 'Product deleted successfully');
+        return ApiResponse::success(null, 'Produk berhasil dihapus');
     }
 }

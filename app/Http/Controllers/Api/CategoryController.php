@@ -17,7 +17,7 @@ class CategoryController extends Controller
     {
         $categories = Category::withCount('products')->get();
 
-        return ApiResponse::success(CategoryResource::collection($categories), 'Categories retrieved successfully');
+        return ApiResponse::success(CategoryResource::collection($categories), 'Daftar kategori berhasil dimuat');
     }
 
     // Create a new category
@@ -25,7 +25,7 @@ class CategoryController extends Controller
     {
         $category = Category::create($request->validated());
 
-        return ApiResponse::created(new CategoryResource($category), 'Category created successfully');
+        return ApiResponse::created(new CategoryResource($category), 'Kategori berhasil ditambahkan');
     }
 
     // Retrieve single category detail
@@ -33,7 +33,7 @@ class CategoryController extends Controller
     {
         $category = Category::withCount('products')->findOrFail($id);
 
-        return ApiResponse::success(new CategoryResource($category), 'Category retrieved successfully');
+        return ApiResponse::success(new CategoryResource($category), 'Data kategori berhasil dimuat');
     }
 
     // Update existing category
@@ -42,7 +42,7 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->update($request->validated());
 
-        return ApiResponse::success(new CategoryResource($category), 'Category updated successfully');
+        return ApiResponse::success(new CategoryResource($category), 'Kategori berhasil diperbarui');
     }
 
     // Delete category if it has no associated products
@@ -51,11 +51,11 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
 
         if ($category->products()->exists()) {
-            return ApiResponse::badRequest('Cannot delete category because it has associated products.');
+            return ApiResponse::badRequest('Kategori tidak dapat dihapus karena masih terkait dengan produk.');
         }
 
         $category->delete();
 
-        return ApiResponse::success(null, 'Category deleted successfully');
+        return ApiResponse::success(null, 'Kategori berhasil dihapus');
     }
 }

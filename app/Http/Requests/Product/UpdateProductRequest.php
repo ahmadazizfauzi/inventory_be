@@ -14,7 +14,7 @@ class UpdateProductRequest extends FormRequest
 
     public function rules(): array
     {
-        $productId = $this->route('product')?->id ?? $this->route('product');
+        $productId = $this->route('id') ?? ($this->route('product')?->id ?? $this->route('product'));
 
         return [
             'category_id' => ['sometimes', 'required', 'integer', 'exists:categories,id'],

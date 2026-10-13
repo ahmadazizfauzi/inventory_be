@@ -17,7 +17,7 @@ class SupplierController extends Controller
     {
         $suppliers = Supplier::all();
 
-        return ApiResponse::success(SupplierResource::collection($suppliers), 'Suppliers retrieved successfully');
+        return ApiResponse::success(SupplierResource::collection($suppliers), 'Daftar supplier berhasil dimuat');
     }
 
     // Create a new supplier
@@ -25,7 +25,7 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::create($request->validated());
 
-        return ApiResponse::created(new SupplierResource($supplier), 'Supplier created successfully');
+        return ApiResponse::created(new SupplierResource($supplier), 'Supplier berhasil ditambahkan');
     }
 
     // Retrieve single supplier detail
@@ -33,7 +33,7 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::findOrFail($id);
 
-        return ApiResponse::success(new SupplierResource($supplier), 'Supplier retrieved successfully');
+        return ApiResponse::success(new SupplierResource($supplier), 'Data supplier berhasil dimuat');
     }
 
     // Update existing supplier
@@ -42,7 +42,7 @@ class SupplierController extends Controller
         $supplier = Supplier::findOrFail($id);
         $supplier->update($request->validated());
 
-        return ApiResponse::success(new SupplierResource($supplier), 'Supplier updated successfully');
+        return ApiResponse::success(new SupplierResource($supplier), 'Supplier berhasil diperbarui');
     }
 
     // Delete supplier
@@ -51,6 +51,6 @@ class SupplierController extends Controller
         $supplier = Supplier::findOrFail($id);
         $supplier->delete();
 
-        return ApiResponse::success(null, 'Supplier deleted successfully');
+        return ApiResponse::success(null, 'Supplier berhasil dihapus');
     }
 }

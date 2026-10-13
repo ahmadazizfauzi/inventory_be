@@ -51,8 +51,8 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     });
 
-    // User management restricted to Superadmin
-    Route::middleware('role:superadmin')->group(function () {
+    // User and staff management accessible by Superadmin and Admin
+    Route::middleware('role:superadmin,admin')->group(function () {
         Route::apiResource('users', UserController::class);
     });
 });
