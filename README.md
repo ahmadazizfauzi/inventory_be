@@ -1,7 +1,6 @@
 # Inventory & Stock Management System - RESTful API
 
-Aplikasi RESTful API sistem manajemen inventaris barang dan pencatatan mutasi stok gudang berbasis Laravel dengan autentikasi JWT (JSON Web Token) dan Role-Based Access Control (RBAC).
-
+A robust RESTful API for inventory management and warehouse stock mutation tracking built with Laravel, featuring JWT (JSON Web Token) authentication and Role-Based Access Control (RBAC).
 
 ---
 
@@ -9,14 +8,14 @@ Aplikasi RESTful API sistem manajemen inventaris barang dan pencatatan mutasi st
 - **Framework**: Laravel 11 / 12 (PHP 8.2+)
 - **Database**: MySQL 8.0+
 - **Authentication**: JWT Auth (`php-open-source-saver/jwt-auth`)
-- **Testing**: PHPUnit / Feature Test
-- **Code Standard**: PSR-12 (Laravel Pint)
+- **Testing**: PHPUnit / Feature Tests
+- **Coding Standard**: PSR-12 (Laravel Pint)
 
 ---
 
-## Cara Menjalankan Aplikasi
+## Getting Started
 
-### 1. Clone & Masuk ke Direktori
+### 1. Clone & Navigate to Directory
 ```bash
 cd backend
 ```
@@ -26,13 +25,13 @@ cd backend
 composer install
 ```
 
-### 3. Konfigurasi Environment (.env)
-Salin file `.env.example` menjadi `.env`:
+### 3. Environment Configuration (.env)
+Copy `.env.example` to `.env`:
 ```bash
 cp .env.example .env
 ```
 
-Pastikan kredensial database di `.env` sudah sesuai dengan MySQL lokal Anda:
+Ensure your database credentials in `.env` match your local MySQL configuration:
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -48,36 +47,36 @@ php artisan key:generate
 php artisan jwt:secret
 ```
 
-### 5. Jalankan Migration & Seeder
-Perintah ini akan membuat struktur tabel beserta 36 akun demo, 15 kategori, 15 supplier, 25 katalog produk, dan 20 riwayat mutasi stok:
+### 5. Run Migrations & Seeders
+This command creates the database schema and seeds 36 demo user accounts, 15 categories, 15 suppliers, 25 catalog products, and 20 stock mutation transaction records:
 ```bash
 php artisan migrate --seed
 ```
 
-> **Alternatif File SQL Dump**: Jika tidak ingin menjalankan seeder, file SQL dump lengkap tersedia pada `database/dump.sql` dan dapat langsung di-import via phpMyAdmin / MySQL CLI.
+> **Alternative SQL Dump**: If you prefer not to run seeders, a complete SQL dump file is available at `database/dump.sql` and can be imported directly via phpMyAdmin or MySQL CLI.
 
-### 6. Jalankan Local Development Server
+### 6. Start Local Development Server
 ```bash
 php artisan serve
 ```
-Aplikasi backend aktif di: `http://localhost:8000`
+The backend API is now running at: `http://localhost:8000`
 
 ---
 
-## Akun Demo untuk Pengujian
+## Demo Accounts for Testing
 
-Semua akun demo menggunakan password seragam: `password`
+All demo accounts use the same uniform password: `password`
 
-| Role | Email Demo | Hak Akses Utama |
+| Role | Demo Email | Primary Permissions |
 | :--- | :--- | :--- |
-| **Superadmin** | `superadmin@demo.com` | Akses penuh, kelola akun user (admin & staff) |
-| **Admin** | `admin@demo.com` | CRUD master produk, kategori, supplier, dan mutasi stok |
-| **Staff** | `staff@demo.com` | Melihat katalog barang & mencatat mutasi keluar/masuk |
+| **Superadmin** | `superadmin@demo.com` | Full access, user & staff management (admin & staff accounts) |
+| **Admin** | `admin@demo.com` | Full CRUD for master products, categories, suppliers, and stock mutations |
+| **Staff** | `staff@demo.com` | View catalog & record incoming/outgoing stock mutations |
 
 ---
 
-## Menjalankan Automated Feature Test
-Proyek ini dilengkapi 26 skenario automated feature test (Auth JWT, CRUD Produk, RBAC, Valuasi Dashboard, dan Transaksi Mutasi):
+## Running Automated Feature Tests
+This project comes with 26 automated feature test scenarios covering JWT authentication, product CRUD, RBAC, dashboard valuation, and mutation transactions:
 
 ```bash
 php artisan test
@@ -85,52 +84,55 @@ php artisan test
 
 ---
 
-## Ringkasan Endpoint API (Prefix `/api`)
+## API Endpoints Summary (Prefix `/api`)
 
-### Autentikasi
-| Method | Endpoint | Keterangan | Akses |
+### Authentication
+| Method | Endpoint | Description | Access |
 | :---: | :--- | :--- | :---: |
-| `POST` | `/api/register` | Pendaftaran akun baru (default: staff) | Public |
+| `POST` | `/api/register` | Register new user (default role: staff) | Public |
 | `POST` | `/api/login` | Login & generate JWT token | Public |
-| `GET` | `/api/me` | Profil pengguna login | JWT Auth |
-| `POST` | `/api/logout` | Invalidate token aktif | JWT Auth |
+| `GET` | `/api/me` | Current authenticated user profile | JWT Auth |
+| `POST` | `/api/logout` | Invalidate current token | JWT Auth |
 
 ### Dashboard & Monitoring
-| Method | Endpoint | Keterangan | Akses |
+| Method | Endpoint | Description | Access |
 | :---: | :--- | :--- | :---: |
-| `GET` | `/api/dashboard/summary` | Real-time valuasi aset, estimasi pasar, dan alert stok | JWT Auth |
+| `GET` | `/api/dashboard/summary` | Real-time asset valuation, estimated market margin, and stock alerts | JWT Auth |
 
-### Master Data Produk & Kategori
-| Method | Endpoint | Keterangan | Akses |
+### Master Products & Categories
+| Method | Endpoint | Description | Access |
 | :---: | :--- | :--- | :---: |
-| `GET` | `/api/products` | List produk (Search, Filter Kategori, Status Stok, Pagination) | JWT Auth |
-| `GET` | `/api/products/{id}` | Detail produk | JWT Auth |
-| `POST` | `/api/products` | Tambah produk baru | Admin / Superadmin |
-| `PUT` | `/api/products/{id}` | Update data produk | Admin / Superadmin |
-| `DELETE` | `/api/products/{id}` | Soft delete produk | Admin / Superadmin |
-| `GET` | `/api/categories` | List master kategori | JWT Auth |
-| `POST` | `/api/categories` | Tambah kategori | Admin / Superadmin |
-| `PUT` | `/api/categories/{id}` | Update kategori | Admin / Superadmin |
-| `DELETE` | `/api/categories/{id}` | Hapus kategori (terproteksi relasi) | Admin / Superadmin |
+| `GET` | `/api/products` | List products (Search, Category filter, Stock status, Pagination) | JWT Auth |
+| `GET` | `/api/products/{id}` | Product details | JWT Auth |
+| `POST` | `/api/products` | Create new product | Admin / Superadmin |
+| `PUT` | `/api/products/{id}` | Update product details | Admin / Superadmin |
+| `DELETE` | `/api/products/{id}` | Soft delete product | Admin / Superadmin |
+| `GET` | `/api/categories` | List master categories | JWT Auth |
+| `GET` | `/api/categories/{id}` | Category details | JWT Auth |
+| `POST` | `/api/categories` | Create new category | Admin / Superadmin |
+| `PUT` | `/api/categories/{id}` | Update category | Admin / Superadmin |
+| `DELETE` | `/api/categories/{id}` | Delete category (relation-protected) | Admin / Superadmin |
 
-### Master Supplier
-| Method | Endpoint | Keterangan | Akses |
+### Master Suppliers
+| Method | Endpoint | Description | Access |
 | :---: | :--- | :--- | :---: |
-| `GET` | `/api/suppliers` | List supplier pemasok | JWT Auth |
-| `POST` | `/api/suppliers` | Tambah supplier baru | Admin / Superadmin |
-| `PUT` | `/api/suppliers/{id}` | Update data supplier | Admin / Superadmin |
-| `DELETE` | `/api/suppliers/{id}` | Hapus supplier | Admin / Superadmin |
+| `GET` | `/api/suppliers` | List suppliers | JWT Auth |
+| `GET` | `/api/suppliers/{id}` | Supplier details | JWT Auth |
+| `POST` | `/api/suppliers` | Create new supplier | Admin / Superadmin |
+| `PUT` | `/api/suppliers/{id}` | Update supplier | Admin / Superadmin |
+| `DELETE` | `/api/suppliers/{id}` | Delete supplier | Admin / Superadmin |
 
-### Mutasi Stok (Audit Trail)
-| Method | Endpoint | Keterangan | Akses |
+### Stock Mutations (Audit Trail)
+| Method | Endpoint | Description | Access |
 | :---: | :--- | :--- | :---: |
-| `GET` | `/api/stock-mutations` | Riwayat transaksi keluar/masuk (Paginated) | JWT Auth |
-| `POST` | `/api/stock-mutations` | Catat barang masuk (IN) / barang keluar (OUT) | JWT Auth (All Roles) |
+| `GET` | `/api/stock-mutations` | Paginated transaction history (IN / OUT) | JWT Auth |
+| `POST` | `/api/stock-mutations` | Record stock in (`in`) or stock out (`out`) | JWT Auth (All Roles) |
 
-### Manajemen Pengguna (RBAC)
-| Method | Endpoint | Keterangan | Akses |
+### User Management (RBAC)
+| Method | Endpoint | Description | Access |
 | :---: | :--- | :--- | :---: |
-| `GET` | `/api/users` | List seluruh akun pengguna | Superadmin Saja |
-| `POST` | `/api/users` | Buat akun baru dengan role tertentu | Superadmin Saja |
-| `PUT` | `/api/users/{id}` | Update role / data user | Superadmin Saja |
-| `DELETE` | `/api/users/{id}` | Hapus akun user | Superadmin Saja |
+| `GET` | `/api/users` | List all user accounts (Paginated) | Superadmin / Admin |
+| `GET` | `/api/users/{id}` | User account details | Superadmin / Admin |
+| `POST` | `/api/users` | Create user account with assigned role | Superadmin / Admin |
+| `PUT` | `/api/users/{id}` | Update role or user profile | Superadmin / Admin |
+| `DELETE` | `/api/users/{id}` | Delete user account | Superadmin / Admin |
