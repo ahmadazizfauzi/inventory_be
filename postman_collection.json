@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "8f8b8563-7188-4682-8bc1-inventory-core",
 		"name": "Inventory & Stock Management API",
-		"description": "Postman Collection for Inventory & Stock Management API (Laravel RESTful API with JWT Auth and RBAC)",
+		"description": "Koleksi Postman Lengkap untuk Inventory & Stock Management API (Laravel 12 RESTful API with JWT Auth, RBAC, dan Filter Komprehensif).\n\nSetiap endpoint GET list dilengkapi dengan seluruh parameter filter (query params) yang didukung backend beserta deskripsi dan contoh nilainya. Anda cukup mencentang (toggle ON) atau menguncentang (toggle OFF) parameter yang diinginkan di tab Params.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"variable": [
@@ -109,7 +109,7 @@
 					}
 				},
 				{
-					"name": "Register (New User)",
+					"name": "Register User Baru",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -118,20 +118,20 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Budi Staff Baru\",\n    \"email\": \"budi.baru@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+							"raw": "{\n    \"name\": \"Budi Santoso\",\n    \"email\": \"budi.operator@demo.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\",\n    \"role\": \"staff\"\n}"
 						},
 						"url": { "raw": "{{base_url}}/register", "host": ["{{base_url}}"], "path": ["register"] }
 					}
 				},
 				{
-					"name": "Get Profile (Me)",
+					"name": "Get User Profile",
 					"request": {
 						"method": "GET",
 						"header": [
 							{ "key": "Accept", "value": "application/json" },
 							{ "key": "Authorization", "value": "Bearer {{token}}" }
 						],
-						"url": { "raw": "{{base_url}}/me", "host": ["{{base_url}}"], "path": ["me"] }
+						"url": { "raw": "{{base_url}}/profile", "host": ["{{base_url}}"], "path": ["profile"] }
 					}
 				},
 				{
@@ -151,7 +151,7 @@
 			"name": "2. Dashboard",
 			"item": [
 				{
-					"name": "Get Dashboard Summary",
+					"name": "Get Dashboard Summary (Valuasi & Trend 30 Hari)",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -167,36 +167,28 @@
 			"name": "3. Products",
 			"item": [
 				{
-					"name": "List Products (Default)",
+					"name": "Get List Products (Semua Parameter Lengkap)",
 					"request": {
 						"method": "GET",
 						"header": [
 							{ "key": "Accept", "value": "application/json" },
 							{ "key": "Authorization", "value": "Bearer {{token}}" }
 						],
-						"url": { "raw": "{{base_url}}/products?page=1&per_page=10", "host": ["{{base_url}}"], "path": ["products"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "10" }] }
-					}
-				},
-				{
-					"name": "Search Products",
-					"request": {
-						"method": "GET",
-						"header": [
-							{ "key": "Accept", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer {{token}}" }
-						],
-						"url": { "raw": "{{base_url}}/products?search=Monitor", "host": ["{{base_url}}"], "path": ["products"], "query": [{ "key": "search", "value": "Monitor" }] }
-					}
-				},
-				{
-					"name": "Filter Low Stock Products",
-					"request": {
-						"method": "GET",
-						"header": [
-							{ "key": "Accept", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer {{token}}" }
-						],
-						"url": { "raw": "{{base_url}}/products?stock_status=low_stock", "host": ["{{base_url}}"], "path": ["products"], "query": [{ "key": "stock_status", "value": "low_stock" }] }
+						"url": {
+							"raw": "{{base_url}}/products?page=1&per_page=10&search=Kopi&category_id=1&stock_status=low_stock&start_date=2026-10-01&end_date=2026-10-13&order_by=latest",
+							"host": ["{{base_url}}"],
+							"path": ["products"],
+							"query": [
+								{ "key": "page", "value": "1", "description": "Nomor halaman (default: 1)" },
+								{ "key": "per_page", "value": "10", "description": "Jumlah data per halaman (1 - 100)" },
+								{ "key": "search", "value": "Kopi", "description": "Pencarian kata kunci (nama produk atau SKU)", "disabled": true },
+								{ "key": "category_id", "value": "1", "description": "Filter berdasarkan ID Kategori", "disabled": true },
+								{ "key": "stock_status", "value": "low_stock", "description": "Filter status stok: all | in_stock | low_stock | out_of_stock", "disabled": true },
+								{ "key": "start_date", "value": "2026-10-01", "description": "Filter rentang tanggal awal pembuatan produk (YYYY-MM-DD)", "disabled": true },
+								{ "key": "end_date", "value": "2026-10-13", "description": "Filter rentang tanggal akhir pembuatan produk (YYYY-MM-DD)", "disabled": true },
+								{ "key": "order_by", "value": "latest", "description": "Urutan data: latest | oldest | price_asc | price_desc | name_asc", "disabled": true }
+							]
+						}
 					}
 				},
 				{
@@ -211,7 +203,7 @@
 					}
 				},
 				{
-					"name": "Create Product (Admin Only)",
+					"name": "Create Product (Admin/Superadmin)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -221,13 +213,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"category_id\": 1,\n    \"sku\": \"PRD-026\",\n    \"name\": \"iPad Pro 11 M4\",\n    \"purchase_price\": 14500000,\n    \"selling_price\": 16900000,\n    \"stock\": 5,\n    \"min_stock\": 2\n}"
+							"raw": "{\n    \"category_id\": 1,\n    \"sku\": \"PRD-NEW-01\",\n    \"name\": \"Biji Kopi Arabika Gayo 1kg\",\n    \"purchase_price\": 120000,\n    \"selling_price\": 165000,\n    \"stock\": 25,\n    \"min_stock\": 5\n}"
 						},
 						"url": { "raw": "{{base_url}}/products", "host": ["{{base_url}}"], "path": ["products"] }
 					}
 				},
 				{
-					"name": "Update Product (Admin Only)",
+					"name": "Update Product (Admin/Superadmin)",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -237,13 +229,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"iPad Pro 11 M4 Wi-Fi 256GB\",\n    \"selling_price\": 17200000\n}"
+							"raw": "{\n    \"name\": \"Biji Kopi Arabika Gayo 1kg (Specialty Grade)\",\n    \"selling_price\": 175000,\n    \"min_stock\": 8\n}"
 						},
 						"url": { "raw": "{{base_url}}/products/1", "host": ["{{base_url}}"], "path": ["products", "1"] }
 					}
 				},
 				{
-					"name": "Delete Product (Admin Only)",
+					"name": "Delete Product (Soft Delete - Admin/Superadmin)",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -256,65 +248,28 @@
 			]
 		},
 		{
-			"name": "4. Stock Mutations",
+			"name": "4. Categories",
 			"item": [
 				{
-					"name": "List Stock Mutations",
+					"name": "Get List Categories (Semua Parameter Lengkap)",
 					"request": {
 						"method": "GET",
 						"header": [
 							{ "key": "Accept", "value": "application/json" },
 							{ "key": "Authorization", "value": "Bearer {{token}}" }
 						],
-						"url": { "raw": "{{base_url}}/stock-mutations?page=1&per_page=10", "host": ["{{base_url}}"], "path": ["stock-mutations"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "10" }] }
-					}
-				},
-				{
-					"name": "Record Stock IN (Barang Masuk)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{ "key": "Accept", "value": "application/json" },
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer {{token}}" }
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"product_id\": 1,\n    \"supplier_id\": 1,\n    \"type\": \"in\",\n    \"quantity\": 5,\n    \"notes\": \"Restock pengadaan invoice PO-992\"\n}"
-						},
-						"url": { "raw": "{{base_url}}/stock-mutations", "host": ["{{base_url}}"], "path": ["stock-mutations"] }
-					}
-				},
-				{
-					"name": "Record Stock OUT (Barang Keluar)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{ "key": "Accept", "value": "application/json" },
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer {{token}}" }
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"product_id\": 1,\n    \"type\": \"out\",\n    \"quantity\": 2,\n    \"notes\": \"Pengadaan workstation tim marketing\"\n}"
-						},
-						"url": { "raw": "{{base_url}}/stock-mutations", "host": ["{{base_url}}"], "path": ["stock-mutations"] }
-					}
-				}
-			]
-		},
-		{
-			"name": "5. Categories",
-			"item": [
-				{
-					"name": "List Categories",
-					"request": {
-						"method": "GET",
-						"header": [
-							{ "key": "Accept", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer {{token}}" }
-						],
-						"url": { "raw": "{{base_url}}/categories", "host": ["{{base_url}}"], "path": ["categories"] }
+						"url": {
+							"raw": "{{base_url}}/categories?page=1&per_page=10&search=Kopi&start_date=2026-10-01&end_date=2026-10-13",
+							"host": ["{{base_url}}"],
+							"path": ["categories"],
+							"query": [
+								{ "key": "page", "value": "1", "description": "Nomor halaman (default: 1)" },
+								{ "key": "per_page", "value": "10", "description": "Jumlah data per halaman (1 - 100)" },
+								{ "key": "search", "value": "Kopi", "description": "Pencarian nama atau deskripsi kategori", "disabled": true },
+								{ "key": "start_date", "value": "2026-10-01", "description": "Filter tanggal dibuat awal (YYYY-MM-DD)", "disabled": true },
+								{ "key": "end_date", "value": "2026-10-13", "description": "Filter tanggal dibuat akhir (YYYY-MM-DD)", "disabled": true }
+							]
+						}
 					}
 				},
 				{
@@ -329,7 +284,7 @@
 					}
 				},
 				{
-					"name": "Create Category (Admin Only)",
+					"name": "Create Category (Admin/Superadmin)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -339,13 +294,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Smart Office Devices\",\n    \"description\": \"Perangkat cerdas penunjang produktivitas kantor modern\"\n}"
+							"raw": "{\n    \"name\": \"Bahan Baku Kopi\",\n    \"description\": \"Kategori biji mentah dan bubuk kopi roasting\"\n}"
 						},
 						"url": { "raw": "{{base_url}}/categories", "host": ["{{base_url}}"], "path": ["categories"] }
 					}
 				},
 				{
-					"name": "Update Category (Admin Only)",
+					"name": "Update Category (Admin/Superadmin)",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -355,13 +310,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Smart Office Devices & IoT\",\n    \"description\": \"Perangkat pintar dan ekosistem IoT\"\n}"
+							"raw": "{\n    \"name\": \"Bahan Baku Kopi & Teh\",\n    \"description\": \"Kategori bahan minuman cafe dan resto\"\n}"
 						},
 						"url": { "raw": "{{base_url}}/categories/1", "host": ["{{base_url}}"], "path": ["categories", "1"] }
 					}
 				},
 				{
-					"name": "Delete Category (Admin Only)",
+					"name": "Delete Category (Admin/Superadmin)",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -374,17 +329,28 @@
 			]
 		},
 		{
-			"name": "6. Suppliers",
+			"name": "5. Suppliers",
 			"item": [
 				{
-					"name": "List Suppliers",
+					"name": "Get List Suppliers (Semua Parameter Lengkap)",
 					"request": {
 						"method": "GET",
 						"header": [
 							{ "key": "Accept", "value": "application/json" },
 							{ "key": "Authorization", "value": "Bearer {{token}}" }
 						],
-						"url": { "raw": "{{base_url}}/suppliers", "host": ["{{base_url}}"], "path": ["suppliers"] }
+						"url": {
+							"raw": "{{base_url}}/suppliers?page=1&per_page=10&search=Sumber&start_date=2026-10-01&end_date=2026-10-13",
+							"host": ["{{base_url}}"],
+							"path": ["suppliers"],
+							"query": [
+								{ "key": "page", "value": "1", "description": "Nomor halaman (default: 1)" },
+								{ "key": "per_page", "value": "10", "description": "Jumlah data per halaman (1 - 100)" },
+								{ "key": "search", "value": "Sumber", "description": "Pencarian nama supplier, telepon, email, alamat", "disabled": true },
+								{ "key": "start_date", "value": "2026-10-01", "description": "Filter tanggal dibuat awal (YYYY-MM-DD)", "disabled": true },
+								{ "key": "end_date", "value": "2026-10-13", "description": "Filter tanggal dibuat akhir (YYYY-MM-DD)", "disabled": true }
+							]
+						}
 					}
 				},
 				{
@@ -399,7 +365,7 @@
 					}
 				},
 				{
-					"name": "Create Supplier (Admin Only)",
+					"name": "Create Supplier (Admin/Superadmin)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -409,13 +375,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"PT Sumber Surya Perkasa\",\n    \"phone\": \"081234567890\",\n    \"email\": \"contact@sumbersurya.co.id\",\n    \"address\": \"Kawasan Industri MM2100 Blok C-4, Cikarang Barat\"\n}"
+							"raw": "{\n    \"name\": \"PT Sumber Makmur Nusantara\",\n    \"phone\": \"081234567890\",\n    \"email\": \"distribusi@sumbermakmur.com\",\n    \"address\": \"Kawasan Industri MM2100 Blok C-4, Cikarang Barat\"\n}"
 						},
 						"url": { "raw": "{{base_url}}/suppliers", "host": ["{{base_url}}"], "path": ["suppliers"] }
 					}
 				},
 				{
-					"name": "Update Supplier (Admin Only)",
+					"name": "Update Supplier (Admin/Superadmin)",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -425,13 +391,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"PT Sumber Surya Perkasa Tbk\",\n    \"phone\": \"081298765432\",\n    \"email\": \"procurement@sumbersurya.co.id\"\n}"
+							"raw": "{\n    \"phone\": \"081298765432\",\n    \"address\": \"Kawasan Industri MM2100 Blok C-4 No. 12, Cikarang Barat\"\n}"
 						},
 						"url": { "raw": "{{base_url}}/suppliers/1", "host": ["{{base_url}}"], "path": ["suppliers", "1"] }
 					}
 				},
 				{
-					"name": "Delete Supplier (Admin Only)",
+					"name": "Delete Supplier (Admin/Superadmin)",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -444,17 +410,89 @@
 			]
 		},
 		{
-			"name": "7. User Management (Superadmin & Admin)",
+			"name": "6. Stock Mutations",
 			"item": [
 				{
-					"name": "List Users (Paginated)",
+					"name": "Get List Stock Mutations (Semua Parameter Lengkap)",
 					"request": {
 						"method": "GET",
 						"header": [
 							{ "key": "Accept", "value": "application/json" },
 							{ "key": "Authorization", "value": "Bearer {{token}}" }
 						],
-						"url": { "raw": "{{base_url}}/users?page=1&per_page=10", "host": ["{{base_url}}"], "path": ["users"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "10" }] }
+						"url": {
+							"raw": "{{base_url}}/stock-mutations?page=1&per_page=10&product_id=1&type=in&search=Kopi&start_date=2026-10-01&end_date=2026-10-13",
+							"host": ["{{base_url}}"],
+							"path": ["stock-mutations"],
+							"query": [
+								{ "key": "page", "value": "1", "description": "Nomor halaman (default: 1)" },
+								{ "key": "per_page", "value": "10", "description": "Jumlah data per halaman (1 - 100)" },
+								{ "key": "product_id", "value": "1", "description": "Filter berdasarkan ID produk spesifik", "disabled": true },
+								{ "key": "type", "value": "in", "description": "Filter jenis alur mutasi: in (Barang Masuk) | out (Barang Keluar)", "disabled": true },
+								{ "key": "search", "value": "Kopi", "description": "Pencarian kata kunci (nama produk, SKU, nama operator)", "disabled": true },
+								{ "key": "start_date", "value": "2026-10-01", "description": "Filter rentang tanggal awal mutasi (YYYY-MM-DD)", "disabled": true },
+								{ "key": "end_date", "value": "2026-10-13", "description": "Filter rentang tanggal akhir mutasi (YYYY-MM-DD)", "disabled": true }
+							]
+						}
+					}
+				},
+				{
+					"name": "Record Mutasi Barang Masuk (IN)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1,\n    \"supplier_id\": 1,\n    \"type\": \"in\",\n    \"quantity\": 20,\n    \"notes\": \"Restok suplai mingguan dari supplier distributor\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/stock-mutations", "host": ["{{base_url}}"], "path": ["stock-mutations"] }
+					}
+				},
+				{
+					"name": "Record Mutasi Barang Keluar (OUT)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1,\n    \"type\": \"out\",\n    \"quantity\": 5,\n    \"notes\": \"Pengeluaran barang untuk display toko / pesanan penjualan\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/stock-mutations", "host": ["{{base_url}}"], "path": ["stock-mutations"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Users & Staff Management",
+			"item": [
+				{
+					"name": "Get List Users (Semua Parameter Lengkap)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/users?page=1&per_page=10&search=staff&start_date=2026-10-01&end_date=2026-10-13",
+							"host": ["{{base_url}}"],
+							"path": ["users"],
+							"query": [
+								{ "key": "page", "value": "1", "description": "Nomor halaman (default: 1)" },
+								{ "key": "per_page", "value": "10", "description": "Jumlah data per halaman (1 - 100)" },
+								{ "key": "search", "value": "staff", "description": "Pencarian kata kunci nama staf atau email pengguna", "disabled": true },
+								{ "key": "start_date", "value": "2026-10-01", "description": "Filter tanggal pendaftaran akun awal (YYYY-MM-DD)", "disabled": true },
+								{ "key": "end_date", "value": "2026-10-13", "description": "Filter tanggal pendaftaran akun akhir (YYYY-MM-DD)", "disabled": true }
+							]
+						}
 					}
 				},
 				{
@@ -469,7 +507,7 @@
 					}
 				},
 				{
-					"name": "Create User",
+					"name": "Create User / Staff (Admin/Superadmin)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -479,13 +517,13 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Rian Pratama\",\n    \"email\": \"rian.pratama@demo.com\",\n    \"password\": \"password\",\n    \"role\": \"staff\"\n}"
+							"raw": "{\n    \"name\": \"Siti Rahma\",\n    \"email\": \"siti.staff@demo.com\",\n    \"password\": \"password\",\n    \"role\": \"staff\"\n}"
 						},
 						"url": { "raw": "{{base_url}}/users", "host": ["{{base_url}}"], "path": ["users"] }
 					}
 				},
 				{
-					"name": "Update User",
+					"name": "Update User / Role (Admin/Superadmin)",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -495,20 +533,20 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Rian Pratama Senior\",\n    \"role\": \"admin\"\n}"
+							"raw": "{\n    \"name\": \"Siti Rahmawati\",\n    \"role\": \"admin\"\n}"
 						},
-						"url": { "raw": "{{base_url}}/users/2", "host": ["{{base_url}}"], "path": ["users", "2"] }
+						"url": { "raw": "{{base_url}}/users/1", "host": ["{{base_url}}"], "path": ["users", "1"] }
 					}
 				},
 				{
-					"name": "Delete User",
+					"name": "Delete User (Admin/Superadmin)",
 					"request": {
 						"method": "DELETE",
 						"header": [
 							{ "key": "Accept", "value": "application/json" },
 							{ "key": "Authorization", "value": "Bearer {{token}}" }
 						],
-						"url": { "raw": "{{base_url}}/users/2", "host": ["{{base_url}}"], "path": ["users", "2"] }
+						"url": { "raw": "{{base_url}}/users/1", "host": ["{{base_url}}"], "path": ["users", "1"] }
 					}
 				}
 			]
